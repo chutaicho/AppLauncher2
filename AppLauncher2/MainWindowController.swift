@@ -9,66 +9,6 @@
 
 import Cocoa
 
-//TODO: save the entry list
-@objc(AppEntry)
-class AppEntry: NSObject
-{
-    var name: String = ""
-    var path: String = ""
-    var hide: Bool   = false
-    var icon: NSImage!
-    
-    //TODO: error handling in case of that the icon file is missing.
-    init(aPath p: String, aName n: String, aHide h: Bool, aIcon i: NSImage!)
-    {
-        path = p; name = n; hide = h; icon = i
-    }
-    convenience override init()
-    {
-        self.init(aPath: "",aName: "", aHide: false, aIcon: nil)
-    }
-}
-
-class LaunchParams: NSObject, NSCoding
-{
-    var keepRun     : Bool = false
-    var timerEnabled: Bool = false
-    
-    
-    // TODO: should use a tuple for these? -> maybe Tuple can not be encoded because it's not a class!
-    var quitHour    : Int  = -1
-    var quitMinute  : Int  = -1
-    
-    // TEST
-    //var quitTime:(hour:Int, minute:Int) = (-1,-1)
-    
-    // TODO: needs application list.
-    //var apps: [String] = []
-    
-    override init(){}
-    
-    required init(coder aDecoder: NSCoder)
-    {
-        keepRun = aDecoder.decodeObjectForKey("KR") as! Bool
-        timerEnabled = aDecoder.decodeObjectForKey("TE") as! Bool
-        quitHour   = aDecoder.decodeObjectForKey("QH") as! Int
-        quitMinute = aDecoder.decodeObjectForKey("QM") as! Int
-        
-        //TEST
-        //quitTime = aDecoder.decodeObjectForKey("QT") as! (Int, Int)
-    }
-    func encodeWithCoder(aCoder: NSCoder)
-    {
-        aCoder.encodeObject(keepRun, forKey:"KR")
-        aCoder.encodeObject(timerEnabled, forKey:"TE")
-        aCoder.encodeObject(quitHour, forKey:"QH")
-        aCoder.encodeObject(quitMinute, forKey:"QM")
-        
-        //TEST
-        //aCoder.encodeObject(quitTime, forKey:"QT")
-    }
-}
-
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
     @IBOutlet weak var tableView: NSTableView!
@@ -125,6 +65,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     // MARK: - IBAction
     @IBAction func quitApplication(sender: NSButton)
     {
+        //TODO: quit all apps which are on the list.
+        
         NSThread.sleepForTimeInterval(0.25) // sleep a bit before quitting.
         NSApp.terminate(self)
     }
@@ -151,7 +93,6 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         save()
     }
     
-    //TODO: validation for adding only application file.
     @IBAction func addApplication(sender: NSButton)
     {
         let openPanel = NSOpenPanel()
@@ -169,20 +110,34 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 //Do what you will
                 //If there's only one URL, surely 'openPanel.URL'
                 //but otherwise a for loop works
-                print(openPanel.URL?.absoluteString)
-                print(openPanel.URL?.lastPathComponent)
+                
+                //print(openPanel.URL?.absoluteString)
+                //print(openPanel.URL?.lastPathComponent)
                 
                 let path = openPanel.URL?.path
                 let name = openPanel.URL?.lastPathComponent
                 let appname = name?.stringByDeletingPathExtension
+                let extention = openPanel.URL?.pathExtension
                 
-                // TODO: set the icon image into the entry
-                let ws = NSWorkspace.sharedWorkspace()
-                let icon: NSImage = ws.iconForFile(path!)
-                let entry: AppEntry = AppEntry(aPath: path!, aName: appname!, aHide: false, aIcon: icon)
-                
-                self.arrayController.addObject(entry)
-                self.rearrangeObject()
+                if extention != "app"
+                {
+                    let alert = NSAlert()
+                    alert.alertStyle = NSAlertStyle.InformationalAlertStyle
+                    alert.messageText = "Uh!"
+                    alert.informativeText = "Sorry! You can only set an application file."
+                    alert.beginSheetModalForWindow(self.window!, completionHandler: nil)
+                }
+                else
+                {
+//                    let ws = NSWorkspace.sharedWorkspace()
+//                    let icon: NSImage = ws.iconForFile(path!)
+                    let entry: AppEntry = AppEntry()
+                    entry.set(aPath: path!, aName: appname!, aHide: false)//, aIcon: nil)
+                    entry.fetchIconData()
+                    
+                    self.arrayController.addObject(entry)
+                    self.rearrangeObject()
+                }
             }
         }
     }
@@ -190,6 +145,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     {
         self.arrayController.removeObjectAtArrangedObjectIndex(self.arrayController.selectionIndex)
         self.rearrangeObject()
+        
+        //TODO: store full-path list to _params
     }
     
     // MARK: - Event handlers
@@ -211,7 +168,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 }
             }
             
-            if target.hide
+            if target != nil && target.hide
             {
                 let ws = NSWorkspace.sharedWorkspace()
                 let apps = ws.runningApplications
@@ -239,6 +196,12 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             }
         }
     }
+    func launchApp(t: NSTimer)
+    {
+        let userInfo = t.userInfo as! Dictionary<String, AnyObject>
+        let path: String = userInfo["aPath"] as! String
+        NSWorkspace.sharedWorkspace().launchApplication(path)
+    }
     
     //MARK: - public
     func timerUpdate()
@@ -257,6 +220,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     {
         
     }
+    
     
     //MARK: - private
     private func save()
@@ -284,15 +248,14 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         
         return res
     }
-    func launchApp(t: NSTimer)
-    {
-        let userInfo = t.userInfo as! Dictionary<String, AnyObject>
-        let path: String = userInfo["aPath"] as! String
-        NSWorkspace.sharedWorkspace().launchApplication(path)
-    }
     
     //MARK: - TableView
     //TODO: set the table-view's order to be editable.
+    func validatePath(stringPointer: AutoreleasingUnsafeMutablePointer<NSString?>, error outError: NSError) -> Bool
+    {
+        print("validated.")
+        return false
+    }
     func numberOfRowsInTableView(tableView: NSTableView) -> Int
     {
         let numberOfRows:Int = 10

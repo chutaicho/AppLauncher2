@@ -131,7 +131,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="RRy-f3-qJN" name="value" keyPath="objectValue.name" id="SNo-ym-OHJ"/>
+                                                                <binding destination="RRy-f3-qJN" name="value" keyPath="objectValue.name" id="ha0-0x-rih"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -169,7 +169,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="61n-6v-aqh" name="value" keyPath="objectValue.path" id="5AO-fx-x2L"/>
+                                                                <binding destination="61n-6v-aqh" name="value" keyPath="objectValue.path" id="S1d-S3-KDI"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
