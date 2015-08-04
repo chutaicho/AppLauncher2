@@ -4,7 +4,7 @@ Rewrote in Swift2.
   
 Created by [takashiaoki.com](http://takashiaoki.com)  
 
-System requirement: OSX 10.10 or higher.
+Requirement: Xcode7 or higher.
 
 <!--![Screenshot](/../master/screenshot.png?raw=true "")-->
 

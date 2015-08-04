@@ -16,17 +16,16 @@ class AppEntry: NSObject
     var name: String = ""
     var path: String = ""
     var hide: Bool   = false
-    
-    //TODO: implement a icon image.
     var icon: NSImage!
     
-    init(aPath p: String, aName n: String, aHide h: Bool)
+    //TODO: error handling in case of that the icon file is missing.
+    init(aPath p: String, aName n: String, aHide h: Bool, aIcon i: NSImage!)
     {
-        path = p; name = n; hide = h;
+        path = p; name = n; hide = h; icon = i
     }
     convenience override init()
     {
-        self.init(aPath: "",aName: "", aHide: false)
+        self.init(aPath: "",aName: "", aHide: false, aIcon: nil)
     }
 }
 
@@ -36,14 +35,15 @@ class LaunchParams: NSObject, NSCoding
     var timerEnabled: Bool = false
     
     
-    // TODO: should use a tuple for these?
+    // TODO: should use a tuple for these? -> maybe Tuple can not be encoded because it's not a class!
     var quitHour    : Int  = -1
     var quitMinute  : Int  = -1
     
     // TEST
-    var quitTime:(hour:Int, minute:Int) = (-1,-1)
+    //var quitTime:(hour:Int, minute:Int) = (-1,-1)
     
     // TODO: needs application list.
+    //var apps: [String] = []
     
     override init(){}
     
@@ -51,17 +51,21 @@ class LaunchParams: NSObject, NSCoding
     {
         keepRun = aDecoder.decodeObjectForKey("KR") as! Bool
         timerEnabled = aDecoder.decodeObjectForKey("TE") as! Bool
-//        quitTime   = aDecoder.decodeObjectForKey("QT") as! NSDate
         quitHour   = aDecoder.decodeObjectForKey("QH") as! Int
         quitMinute = aDecoder.decodeObjectForKey("QM") as! Int
+        
+        //TEST
+        //quitTime = aDecoder.decodeObjectForKey("QT") as! (Int, Int)
     }
     func encodeWithCoder(aCoder: NSCoder)
     {
         aCoder.encodeObject(keepRun, forKey:"KR")
         aCoder.encodeObject(timerEnabled, forKey:"TE")
-//        aCoder.encodeObject(quitTime, forKey:"QT")
         aCoder.encodeObject(quitHour, forKey:"QH")
         aCoder.encodeObject(quitMinute, forKey:"QM")
+        
+        //TEST
+        //aCoder.encodeObject(quitTime, forKey:"QT")
     }
 }
 
@@ -174,9 +178,9 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 
                 // TODO: set the icon image into the entry
                 let ws = NSWorkspace.sharedWorkspace()
-                let icon: NSImage = ws.iconForFile(path)
+                let icon: NSImage = ws.iconForFile(path!)
+                let entry: AppEntry = AppEntry(aPath: path!, aName: appname!, aHide: false, aIcon: icon)
                 
-                let entry: AppEntry = AppEntry(aPath: path!, aName: appname!, aHide: false)
                 self.arrayController.addObject(entry)
                 self.rearrangeObject()
             }
@@ -273,7 +277,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             if entry.path == path
             {
                 res = true
-                print(path + " is our app")
+                print(path + " is our app.")
                 break
             }
         }

@@ -110,26 +110,35 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="c8f-nZ-LhN">
+                                                <tableCellView id="RRy-f3-qJN">
                                                     <rect key="frame" x="1" y="1" width="244" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IaD-0v-ZUQ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="345" height="17"/>
+                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XxS-J3-ROV">
+                                                            <rect key="frame" x="3" y="0.0" width="17" height="17"/>
                                                             <animations/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="raO-qT-Wu6">
+                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="My1-7o-VDF"/>
+                                                            <connections>
+                                                                <binding destination="RRy-f3-qJN" name="value" keyPath="objectValue.icon" id="SKE-C6-xPB"/>
+                                                            </connections>
+                                                        </imageView>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bo8-4g-B5v">
+                                                            <rect key="frame" x="25" y="0.0" width="105" height="17"/>
+                                                            <animations/>
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="hxd-0w-wpJ">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="c8f-nZ-LhN" name="value" keyPath="objectValue.name" id="nuN-iu-PDW"/>
+                                                                <binding destination="RRy-f3-qJN" name="value" keyPath="objectValue.name" id="SNo-ym-OHJ"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
                                                     <animations/>
                                                     <connections>
-                                                        <outlet property="textField" destination="IaD-0v-ZUQ" id="Opu-3x-529"/>
+                                                        <outlet property="imageView" destination="XxS-J3-ROV" id="PFc-cX-4PN"/>
+                                                        <outlet property="textField" destination="bo8-4g-B5v" id="kA4-2e-mvd"/>
                                                     </connections>
                                                 </tableCellView>
                                             </prototypeCellViews>
@@ -215,7 +224,7 @@
                         </clipView>
                         <animations/>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="0QB-MT-eGL">
-                            <rect key="frame" x="1" y="134" width="620" height="16"/>
+                            <rect key="frame" x="1" y="7" width="0.0" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </scroller>
@@ -254,6 +263,7 @@
                 <string>name</string>
                 <string>path</string>
                 <string>hide</string>
+                <string>icon</string>
             </declaredKeys>
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="_apps" id="VFU-jv-JJn"/>
@@ -261,6 +271,7 @@
         </arrayController>
     </objects>
     <resources>
+        <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
