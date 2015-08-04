@@ -1,0 +1,6 @@
+version: "Apple Swift version 2.0 (swiftlang-700.0.45 clang-700.0.57.2)"
+options: "1aebfb3027b1f76e425f33ebebd5b4df"
+build_time: [490937560, 79094000]
+inputs: 
+	/Users/Takashi/Dropbox/code/osx/AppLauncher2/AppLauncher2/AppDelegate.swift: [490704934, 0]
+	/Users/Takashi/Dropbox/code/osx/AppLauncher2/AppLauncher2/MainWindowController.swift: [490937558, 0]
