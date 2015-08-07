@@ -9,6 +9,9 @@
 
 import Cocoa
 
+typealias KVOContext = UInt8
+var MyObservationContext = KVOContext()
+
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
     @IBOutlet weak var tableView: NSTableView!
@@ -43,20 +46,28 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             print(params.quitHour)
             print(params.quitMinute)
             
-            print("apps size: " + String(params.apps.count))
+            //print("apps size: " + String(params.apps.count))
             
             //TODO: should copy manually?
-            //_params = params
+            _params.keepRun = params.keepRun
+            _params.timerEnabled = params.timerEnabled
+            _params.quitHour = params.quitHour
+            _params.quitMinute = _params.quitMinute
             
+            var i = 0
             for entry:AppEntry in params.apps
             {
-                print(entry.name)
-                print(entry.path)
-                print(entry.hide)
+//                print(entry.name)
+//                print(entry.path)
+//                print(entry.hide)
                 entry.fetchIconData()
                 
                 self.arrayController.addObject(entry)
                 self.rearrangeObject()
+                
+                NSTimer.scheduledTimerWithTimeInterval(1.0 * Double(i), target: self, selector: Selector("launchApp:"), userInfo: ["aPath": entry.path], repeats: false)
+                
+                i++
             }
             
             print("params decoded.")
@@ -72,7 +83,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         
         _timer = NSTimer.scheduledTimerWithTimeInterval(REBOOT_DELAY, target: self, selector: Selector("timerUpdate"), userInfo: nil, repeats: true)
     }
-    
+
     // MARK: - IBAction
     @IBAction func quitApplication(sender: NSButton)
     {
@@ -146,12 +157,12 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             }
         }
     }
+    
+    //TODO: should remove a selected item!
     @IBAction func removeApplication(sender:NSButton)
     {
         self.arrayController.removeObjectAtArrangedObjectIndex(self.arrayController.selectionIndex)
         self.rearrangeObject()
-        
-        //TODO: store full-path list to _params
     }
     
     // MARK: - Event handlers
@@ -226,16 +237,21 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         }
     }
     func exit()
-    {
-        //TODO: quit all apps which are on the list.
+    {   
+        let ws = NSWorkspace.sharedWorkspace()
+        let apps = ws.runningApplications
         
-        
-        
-        
-        
-        
-        //TODO: temporary! save when the cell parametor has been changed. -> should observe the array-controller?
-        save()
+        for app in apps as [NSRunningApplication]
+        {
+            for entry: AppEntry in _params.apps
+            {
+                if entry.name == app.localizedName
+                {
+                    app.terminate()
+                    break
+                }
+            }
+        }
         
         NSThread.sleepForTimeInterval(0.25) // sleep a bit before quitting.
         NSApp.terminate(self)
@@ -274,6 +290,15 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     
     //MARK: - TableView
     //TODO: set the table-view's order to be editable.
+//    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
+//    {
+//        return true
+//    }
+//    func tableView(tableView: NSTableView, shouldReorderColumn columnIndex: Int, toColumn newColumnIndex: Int) -> Bool
+//    {
+//        return true
+//    }
+    
 //    func numberOfRowsInTableView(tableView: NSTableView) -> Int
 //    {
 //        let numberOfRows:Int = 10

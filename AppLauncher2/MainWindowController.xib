@@ -21,19 +21,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="662" height="235"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrz-gJ-UOH" userLabel="Enable End Time">
-                        <rect key="frame" x="243" y="22" width="21" height="18"/>
-                        <animations/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="pdz-sM-6DB">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="endTimeCheckBoxHandler:" target="-2" id="e3R-vr-fF5"/>
-                        </connections>
-                    </button>
                     <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="POt-4s-ZlG">
-                        <rect key="frame" x="270" y="20" width="90" height="27"/>
+                        <rect key="frame" x="430" y="20" width="90" height="27"/>
                         <animations/>
                         <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="2b9-Wi-qu9">
                             <font key="font" metaFont="system"/>
@@ -76,7 +65,7 @@
                         <animations/>
                         <buttonCell key="cell" type="check" title="Keep Run" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bhi-Mk-KbP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
                         <connections>
                             <action selector="keepRunHandler:" target="-2" id="TwR-0V-D8M"/>
@@ -220,6 +209,7 @@
                                     </tableColumns>
                                     <connections>
                                         <binding destination="l93-5i-tW8" name="content" keyPath="arrangedObjects" id="cBC-x2-qts"/>
+                                        <outlet property="delegate" destination="-2" id="wrg-Cj-ZoF"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -252,6 +242,26 @@
                         </buttonCell>
                         <connections>
                             <action selector="quitApplication:" target="-2" id="ITZ-k4-Jrp"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SqP-MV-dIy">
+                        <rect key="frame" x="367" y="23" width="62" height="17"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="End Time" id="lcK-2l-FGg">
+                            <font key="font" metaFont="cellTitle"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrz-gJ-UOH" userLabel="Enable End Time">
+                        <rect key="frame" x="347" y="22" width="21" height="18"/>
+                        <animations/>
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="pdz-sM-6DB">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="endTimeCheckBoxHandler:" target="-2" id="e3R-vr-fF5"/>
                         </connections>
                     </button>
                 </subviews>
