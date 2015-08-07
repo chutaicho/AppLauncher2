@@ -24,7 +24,7 @@
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrz-gJ-UOH" userLabel="Enable End Time">
                         <rect key="frame" x="243" y="22" width="21" height="18"/>
                         <animations/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="only" state="on" inset="2" id="pdz-sM-6DB">
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="pdz-sM-6DB">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -169,7 +169,11 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="61n-6v-aqh" name="value" keyPath="objectValue.path" id="S1d-S3-KDI"/>
+                                                                <binding destination="61n-6v-aqh" name="value" keyPath="objectValue.path" id="2Li-mS-2Hh">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSConditionallySetsEnabled" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -266,7 +270,7 @@
                 <string>icon</string>
             </declaredKeys>
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="_apps" id="VFU-jv-JJn"/>
+                <binding destination="-2" name="contentArray" keyPath="_params.apps" id="RPP-mN-Kdz"/>
             </connections>
         </arrayController>
     </objects>

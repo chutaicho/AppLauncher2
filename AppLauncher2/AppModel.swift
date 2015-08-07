@@ -9,27 +9,21 @@
 
 import Cocoa
 
-//TODO: save the entry list
 @objc(AppEntry)
 class AppEntry: NSObject, NSCoding
 {
     var name: String = ""
     var path: String = ""
     var hide: Bool   = false
-    var icon: NSImage!
+    var icon: NSImage?
     
-    //TODO: error handling in case of that the icon file is missing.
     func set(aPath p: String, aName n: String, aHide h: Bool)
     {
         path = p; name = n; hide = h;
     }
     
-    //    convenience override init()
-    //    {
-    //        self.init(aPath: "",aName: "", aHide: false)//, aIcon: nil)
-    //    }
-    
-    //TODO: change this into setter
+    //TODO: should handle errors in case of that the icon file is missing?
+    // must call to get NSImagea
     func fetchIconData()
     {
         let ws = NSWorkspace.sharedWorkspace()
@@ -53,14 +47,14 @@ class AppEntry: NSObject, NSCoding
 
 class LaunchParams: NSObject, NSCoding
 {
-    var keepRun     : Bool = false
+    var keepRun     : Bool = true
     var timerEnabled: Bool = false
     
     // TODO: should use a tuple for these? -> NO. maybe Tuple can not be encoded because it's not a class!
     var quitHour    : Int  = -1
     var quitMinute  : Int  = -1
     
-    // TODO: application list - can I do this?
+    // TODO: application list - can I do this? -> YES. I can, solved.
     var apps: [AppEntry] = []
     
     override init(){}
@@ -71,9 +65,7 @@ class LaunchParams: NSObject, NSCoding
         timerEnabled = aDecoder.decodeObjectForKey("TE") as! Bool
         quitHour   = aDecoder.decodeObjectForKey("QH") as! Int
         quitMinute = aDecoder.decodeObjectForKey("QM") as! Int
-        
-        //TODO: can I do this?
-        //apps = aDecoder.decodeObjectForKey("APPS") as! [AppEntry]
+        apps = aDecoder.decodeObjectForKey("APPS") as! [AppEntry]
     }
     func encodeWithCoder(aCoder: NSCoder)
     {
@@ -81,8 +73,6 @@ class LaunchParams: NSObject, NSCoding
         aCoder.encodeObject(timerEnabled, forKey:"TE")
         aCoder.encodeObject(quitHour, forKey:"QH")
         aCoder.encodeObject(quitMinute, forKey:"QM")
-        
-        //TEST
-        //aCoder.encodeObject(apps, forKey:"APPS")
+        aCoder.encodeObject(apps, forKey:"APPS")
     }
 }

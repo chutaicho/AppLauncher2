@@ -24,7 +24,6 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     var _params  : LaunchParams   = LaunchParams()
     var _keepRun : Bool           = true;
     var _timer   : NSTimer        = NSTimer()
-    var _apps    : [AppEntry]     = []
     
     override var windowNibName: String? { return NIB_NAME }
     
@@ -37,18 +36,30 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         //TODO: solve when the param is empty.
         if let data = userD.objectForKey(UDKEY_PARAMS) as? NSData
         {
-//            let params = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! LaunchParams
-//            
-//            print(params.keepRun)
-//            print(params.timerEnabled)
-//            print(params.quitHour)
-//            print(params.quitMinute)
+            let params = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! LaunchParams
             
+            print(params.keepRun)
+            print(params.timerEnabled)
+            print(params.quitHour)
+            print(params.quitMinute)
+            
+            print("apps size: " + String(params.apps.count))
+            
+            //TODO: should copy manually?
             //_params = params
             
-            print("params decoded.")
+            for entry:AppEntry in params.apps
+            {
+                print(entry.name)
+                print(entry.path)
+                print(entry.hide)
+                entry.fetchIconData()
+                
+                self.arrayController.addObject(entry)
+                self.rearrangeObject()
+            }
             
-            //TODO: set the saved params into the app.
+            print("params decoded.")
         }
         else
         {
@@ -65,10 +76,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     // MARK: - IBAction
     @IBAction func quitApplication(sender: NSButton)
     {
-        //TODO: quit all apps which are on the list.
-        
-        NSThread.sleepForTimeInterval(0.25) // sleep a bit before quitting.
-        NSApp.terminate(self)
+        exit()
     }
     @IBAction func keepRunHandler(sender: NSButton)
     {
@@ -129,12 +137,9 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 }
                 else
                 {
-//                    let ws = NSWorkspace.sharedWorkspace()
-//                    let icon: NSImage = ws.iconForFile(path!)
                     let entry: AppEntry = AppEntry()
-                    entry.set(aPath: path!, aName: appname!, aHide: false)//, aIcon: nil)
+                    entry.set(aPath: path!, aName: appname!, aHide: false)
                     entry.fetchIconData()
-                    
                     self.arrayController.addObject(entry)
                     self.rearrangeObject()
                 }
@@ -159,7 +164,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             print("launched: " + path + ", " + name)
             
             var target:AppEntry!
-            for entry:AppEntry in _apps
+            for entry:AppEntry in _params.apps
             {
                 if entry.path == path
                 {
@@ -206,37 +211,55 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     //MARK: - public
     func timerUpdate()
     {
-        //TODO: check the current time. shutdown everything.
-        
         let date = NSDate()
         let cal = NSCalendar.currentCalendar()
         let hour    = cal.components(NSCalendarUnit.Hour, fromDate: date).hour
         let minutes = cal.components(NSCalendarUnit.Minute, fromDate: date).minute
-        
         let now:(h:Int,m:Int) = (hour, minutes)
-        print(String(now.h) + ":" + String(now.m))
-    }
-    func clear()
-    {
         
+        print("now: " + String(now.h) + ":" + String(now.m))
+        print("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
+        
+        if now.h == _params.quitHour && now.m == _params.quitMinute
+        {
+            exit()
+        }
+    }
+    func exit()
+    {
+        //TODO: quit all apps which are on the list.
+        
+        
+        
+        
+        
+        
+        //TODO: temporary! save when the cell parametor has been changed. -> should observe the array-controller?
+        save()
+        
+        NSThread.sleepForTimeInterval(0.25) // sleep a bit before quitting.
+        NSApp.terminate(self)
     }
     
     
     //MARK: - private
-    private func save()
+    //private
+    func save()
     {
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setValue(NSKeyedArchiver.archivedDataWithRootObject(_params), forKey: UDKEY_PARAMS)
+        print("----------> saved.")
     }
     private func rearrangeObject()
     {
         self.arrayController.rearrangeObjects()
+        save()
     }
     private func isOurApp(aPath path: String) -> Bool
     {
         var res = false
         
-        for entry:AppEntry in _apps
+        for entry:AppEntry in _params.apps
         {
             if entry.path == path
             {
@@ -251,20 +274,20 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     
     //MARK: - TableView
     //TODO: set the table-view's order to be editable.
-    func validatePath(stringPointer: AutoreleasingUnsafeMutablePointer<NSString?>, error outError: NSError) -> Bool
-    {
-        print("validated.")
-        return false
-    }
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int
-    {
-        let numberOfRows:Int = 10
-        return numberOfRows
-    }
+//    func numberOfRowsInTableView(tableView: NSTableView) -> Int
+//    {
+//        let numberOfRows:Int = 10
+//        return numberOfRows
+//    }
     
-    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?
-    {
-        let string:String = "row " + String(row) + ", Col " + String(tableColumn?.identifier)
-        return string
-    }
+//    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?
+//    {
+//        let string:String = "row " + String(row) + ", Col " + String(tableColumn?.identifier)
+//        return string
+//    }
+//    func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool
+//    {
+//        print("selectionShouldChangeInTableView")
+//        return true
+//    }
 }

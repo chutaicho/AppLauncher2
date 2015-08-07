@@ -24,6 +24,6 @@ class AppDelegate: NSObject, NSApplicationDelegate
     func applicationWillTerminate(aNotification: NSNotification)
     {
         // Insert code here to tear down your application
-        _mainWindowController?.clear()
+        //_mainWindowController?.save()
     }
 }
