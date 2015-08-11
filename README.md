@@ -1,4 +1,7 @@
 ####AppLauncher2
+
+UNDER DEVELOPMENT  
+
 The new version of [AppLauncher](https://github.com/chutaicho/AppLauncher).   
 Rewrote in Swift2.
   
@@ -16,5 +19,6 @@ Requirement: Xcode7 or higher.
 
 ####TODO
 
+- Icon
 - Reordering the tableview
-- Drag & Drop 
+- Drag & Drop
