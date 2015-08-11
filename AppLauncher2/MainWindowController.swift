@@ -18,7 +18,6 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     @IBOutlet weak var delaySlider:   NSSlider!
     @IBOutlet weak var delayTF:       NSTextField!
     
-    
     // MARK: - consts
     let NIB_NAME     = "MainWindowController"
     let UDKEY_PARAMS = "SavedParams"
@@ -271,16 +270,14 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         NSThread.sleepForTimeInterval(0.25) // sleep a bit before quitting.
         NSApp.terminate(self)
     }
-    
-    
-    //MARK: - private
-    //private
     func save()
     {
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setValue(NSKeyedArchiver.archivedDataWithRootObject(_params), forKey: UDKEY_PARAMS)
         cout("----------> saved.")
     }
+    
+    //MARK: - private
     private func rearrangeObject()
     {
         self.arrayController.rearrangeObjects()
@@ -304,4 +301,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     }
     //MARK: - TableView
     //TODO: set the table-view's order to be editable.
+//    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
+//    {
+//        return true
+//    }
 }
