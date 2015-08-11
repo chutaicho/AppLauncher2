@@ -78,3 +78,12 @@ class LaunchParams: NSObject, NSCoding
         aCoder.encodeObject(apps, forKey:"APPS")
     }
 }
+
+//MARK: - UTIL
+func deleteUserDefault()
+{
+    for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys
+    {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
+    }
+}

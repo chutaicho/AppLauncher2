@@ -40,7 +40,9 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
 
         let userD = NSUserDefaults.standardUserDefaults()
         
-        //TODO: solve when the param is empty.
+        //MARK: DEBUG
+        //deleteUserDefault()
+        
         if let data = userD.objectForKey(UDKEY_PARAMS) as? NSData
         {
             let params = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! LaunchParams
@@ -67,6 +69,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             var i = 0
             for entry:AppEntry in params.apps
             {
+                // set the application's icon
                 entry.fetchIconData()
                 self.arrayController.addObject(entry)
                 self.rearrangeObject()
@@ -166,6 +169,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                         let entry: AppEntry = AppEntry()
                         entry.set(aPath: path!, aName: appname!, aHide: false)
                         entry.fetchIconData()
+                        
                         self.arrayController.addObject(entry)
                         self.rearrangeObject()
                     }
