@@ -54,12 +54,12 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             _params.quitMinute   = params.quitMinute
             _params.delay        = params.delay
             
-            print("--------")
-            print(_params.keepRun)
-            print(_params.timerEnabled)
-            print(_params.quitHour)
-            print(_params.quitMinute)
-            print(_params.delay)
+            cout("--------")
+            cout(_params.keepRun)
+            cout(_params.timerEnabled)
+            cout(_params.quitHour)
+            cout(_params.quitMinute)
+            cout(_params.delay)
             
             keepRunButton.state  = _params.keepRun ? 1 : 0
             timerEnabled.state   = _params.timerEnabled ? 1 : 0
@@ -79,11 +79,11 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 i++
             }
             
-            print("params decoded.")
+            cout("params decoded.")
         }
         else
         {
-            print("params undefined.")
+            cout("params undefined.")
         }
         
         let nc = NSWorkspace.sharedWorkspace().notificationCenter
@@ -190,7 +190,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         {
             let name: String = info["NSApplicationName"] as! String
             let path: String = info["NSApplicationPath"] as! String
-            print("launched: " + path + ", " + name)
+            cout("launched: " + path + ", " + name)
             
             var target:AppEntry!
             for entry:AppEntry in _params.apps
@@ -281,7 +281,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     {
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setValue(NSKeyedArchiver.archivedDataWithRootObject(_params), forKey: UDKEY_PARAMS)
-//        print("----------> saved.")
+        cout("----------> saved.")
     }
     private func rearrangeObject()
     {
@@ -297,14 +297,13 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             if entry.path == path
             {
                 res = true
-                print(path + " is our app.")
+                cout(path + " is our app.")
                 break
             }
         }
         
         return res
     }
-    
     //MARK: - TableView
     //TODO: set the table-view's order to be editable.
 }

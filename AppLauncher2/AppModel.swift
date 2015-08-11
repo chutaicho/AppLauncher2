@@ -9,6 +9,23 @@
 
 import Cocoa
 
+//MARK: - UTIL
+
+let DEBUG: Bool = false
+
+func deleteUserDefault()
+{
+    for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys
+    {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
+    }
+}
+func cout<T>(value: T)
+{
+    if(DEBUG){ print(value) }
+}
+
+//MARK: - MODEL
 @objc(AppEntry)
 class AppEntry: NSObject, NSCoding
 {
@@ -76,14 +93,5 @@ class LaunchParams: NSObject, NSCoding
         aCoder.encodeObject(quitMinute, forKey:"QM")
         aCoder.encodeObject(delay, forKey:"DE")
         aCoder.encodeObject(apps, forKey:"APPS")
-    }
-}
-
-//MARK: - UTIL
-func deleteUserDefault()
-{
-    for key in NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys
-    {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
     }
 }
