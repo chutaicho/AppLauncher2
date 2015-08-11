@@ -14,9 +14,13 @@ var MyObservationContext = KVOContext()
 
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
-    @IBOutlet weak var tableView: NSTableView!
-    @IBOutlet weak var tableColumn: NSTableColumn!
     @IBOutlet weak var arrayController: NSArrayController!
+    
+    @IBOutlet weak var keepRunButton: NSButton!
+    @IBOutlet weak var timerEnabled:  NSButton!
+    @IBOutlet weak var delaySlider:   NSSlider!
+    @IBOutlet weak var delayTF:       NSTextField!
+    
     
     // MARK: - consts
     let NIB_NAME     = "MainWindowController"
@@ -41,31 +45,33 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         {
             let params = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! LaunchParams
             
-            print(params.keepRun)
-            print(params.timerEnabled)
-            print(params.quitHour)
-            print(params.quitMinute)
-            
-            //print("apps size: " + String(params.apps.count))
-            
             //TODO: should copy manually?
-            _params.keepRun = params.keepRun
+            _params.keepRun      = params.keepRun
             _params.timerEnabled = params.timerEnabled
-            _params.quitHour = params.quitHour
-            _params.quitMinute = _params.quitMinute
+            _params.quitHour     = params.quitHour
+            _params.quitMinute   = params.quitMinute
+            _params.delay        = params.delay
+            
+            print("--------")
+            print(_params.keepRun)
+            print(_params.timerEnabled)
+            print(_params.quitHour)
+            print(_params.quitMinute)
+            print(_params.delay)
+            
+            keepRunButton.state  = _params.keepRun ? 1 : 0
+            timerEnabled.state   = _params.timerEnabled ? 1 : 0
+            delaySlider.integerValue = _params.delay
+            delayTF.integerValue = _params.delay
             
             var i = 0
             for entry:AppEntry in params.apps
             {
-//                print(entry.name)
-//                print(entry.path)
-//                print(entry.hide)
                 entry.fetchIconData()
-                
                 self.arrayController.addObject(entry)
                 self.rearrangeObject()
                 
-                NSTimer.scheduledTimerWithTimeInterval(1.0 * Double(i), target: self, selector: Selector("launchApp:"), userInfo: ["aPath": entry.path], repeats: false)
+                NSTimer.scheduledTimerWithTimeInterval(Double(_params.delay) + 1.0 * Double(i), target: self, selector: Selector("launchApp:"), userInfo: ["aPath": entry.path], repeats: false)
                 
                 i++
             }
@@ -81,7 +87,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         nc.addObserver(self, selector: "onLaunchNotification:", name: NSWorkspaceDidLaunchApplicationNotification,    object: nil)
         nc.addObserver(self, selector: "onQuitNotification:",   name: NSWorkspaceDidTerminateApplicationNotification, object: nil)
         
-        _timer = NSTimer.scheduledTimerWithTimeInterval(REBOOT_DELAY, target: self, selector: Selector("timerUpdate"), userInfo: nil, repeats: true)
+        _timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("timerUpdate"), userInfo: nil, repeats: true)
     }
 
     // MARK: - IBAction
@@ -94,6 +100,13 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         _params.keepRun = sender.state == NSOnState ? true : false
         save()
     }
+    @IBAction func delayHandler(sender: NSSlider)
+    {
+        _params.delay = sender.integerValue
+        delayTF.integerValue = _params.delay
+        save()
+    }
+    
     @IBAction func endTimeCheckBoxHandler(sender: NSButton)
     {
         _params.timerEnabled = sender.state == NSOnState ? true : false
@@ -148,17 +161,18 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 }
                 else
                 {
-                    let entry: AppEntry = AppEntry()
-                    entry.set(aPath: path!, aName: appname!, aHide: false)
-                    entry.fetchIconData()
-                    self.arrayController.addObject(entry)
-                    self.rearrangeObject()
+                    if !self.isOurApp(aPath: path!)
+                    {
+                        let entry: AppEntry = AppEntry()
+                        entry.set(aPath: path!, aName: appname!, aHide: false)
+                        entry.fetchIconData()
+                        self.arrayController.addObject(entry)
+                        self.rearrangeObject()
+                    }
                 }
             }
         }
     }
-    
-    //TODO: should remove a selected item!
     @IBAction func removeApplication(sender:NSButton)
     {
         self.arrayController.removeObjectAtArrangedObjectIndex(self.arrayController.selectionIndex)
@@ -208,7 +222,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             
             if isOurApp(aPath: path) && _params.keepRun
             {
-                NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("launchApp:"), userInfo: ["aPath": path], repeats: false)
+                NSTimer.scheduledTimerWithTimeInterval(REBOOT_DELAY, target: self, selector: Selector("launchApp:"), userInfo: ["aPath": path], repeats: false)
             }
         }
     }
@@ -228,16 +242,15 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         let minutes = cal.components(NSCalendarUnit.Minute, fromDate: date).minute
         let now:(h:Int,m:Int) = (hour, minutes)
         
-        print("now: " + String(now.h) + ":" + String(now.m))
-        print("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
-        
+        //print("now: " + String(now.h) + ":" + String(now.m))
+        //print("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
         if now.h == _params.quitHour && now.m == _params.quitMinute
         {
             exit()
         }
     }
     func exit()
-    {   
+    {
         let ws = NSWorkspace.sharedWorkspace()
         let apps = ws.runningApplications
         
@@ -264,7 +277,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     {
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setValue(NSKeyedArchiver.archivedDataWithRootObject(_params), forKey: UDKEY_PARAMS)
-        print("----------> saved.")
+//        print("----------> saved.")
     }
     private func rearrangeObject()
     {
@@ -290,29 +303,4 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     
     //MARK: - TableView
     //TODO: set the table-view's order to be editable.
-//    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
-//    {
-//        return true
-//    }
-//    func tableView(tableView: NSTableView, shouldReorderColumn columnIndex: Int, toColumn newColumnIndex: Int) -> Bool
-//    {
-//        return true
-//    }
-    
-//    func numberOfRowsInTableView(tableView: NSTableView) -> Int
-//    {
-//        let numberOfRows:Int = 10
-//        return numberOfRows
-//    }
-    
-//    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?
-//    {
-//        let string:String = "row " + String(row) + ", Col " + String(tableColumn?.identifier)
-//        return string
-//    }
-//    func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool
-//    {
-//        print("selectionShouldChangeInTableView")
-//        return true
-//    }
 }

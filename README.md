@@ -13,3 +13,8 @@ Requirement: Xcode7 or higher.
 - Launch Apps
 - Restart listed apps when these are accidentaly terminated.
 - Quit apps in schedule.
+
+####TODO
+
+- Reordering the tableview
+- Drag & Drop 

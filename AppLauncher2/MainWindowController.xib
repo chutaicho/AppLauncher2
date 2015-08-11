@@ -7,12 +7,16 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MainWindowController" customModule="AppLauncher2" customModuleProvider="target">
             <connections>
                 <outlet property="arrayController" destination="l93-5i-tW8" id="U3G-98-RDb"/>
+                <outlet property="delaySlider" destination="1V3-oM-Mag" id="69e-kL-5OF"/>
+                <outlet property="delayTF" destination="3lP-cn-95w" id="TK3-oT-XS5"/>
+                <outlet property="keepRunButton" destination="heH-Aa-qab" id="wFU-z7-Fi5"/>
+                <outlet property="timerEnabled" destination="rrz-gJ-UOH" id="TVu-wG-EmH"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="AL2" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
+        <window title="AppLauncher2" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="662" height="235"/>
@@ -22,7 +26,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="POt-4s-ZlG">
-                        <rect key="frame" x="430" y="20" width="90" height="27"/>
+                        <rect key="frame" x="435" y="20" width="90" height="27"/>
                         <animations/>
                         <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="2b9-Wi-qu9">
                             <font key="font" metaFont="system"/>
@@ -47,6 +51,7 @@
                         </buttonCell>
                         <connections>
                             <action selector="removeApplication:" target="-2" id="SLU-Uc-62a"/>
+                            <binding destination="l93-5i-tW8" name="enabled" keyPath="canRemove" id="882-bl-7tJ"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s6G-65-27J" userLabel="Button Add">
@@ -61,9 +66,9 @@
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heH-Aa-qab" userLabel="Keep Run">
-                        <rect key="frame" x="140" y="22" width="93" height="18"/>
+                        <rect key="frame" x="135" y="22" width="93" height="18"/>
                         <animations/>
-                        <buttonCell key="cell" type="check" title="Keep Run" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bhi-Mk-KbP">
+                        <buttonCell key="cell" type="check" title="Keep Run" bezelStyle="regularSquare" imagePosition="left" inset="2" id="bhi-Mk-KbP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
@@ -209,6 +214,8 @@
                                     </tableColumns>
                                     <connections>
                                         <binding destination="l93-5i-tW8" name="content" keyPath="arrangedObjects" id="cBC-x2-qts"/>
+                                        <binding destination="l93-5i-tW8" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="cBC-x2-qts" id="OVB-rL-3q6"/>
+                                        <outlet property="dataSource" destination="-2" id="uwW-1q-IKF"/>
                                         <outlet property="delegate" destination="-2" id="wrg-Cj-ZoF"/>
                                     </connections>
                                 </tableView>
@@ -244,26 +251,34 @@
                             <action selector="quitApplication:" target="-2" id="ITZ-k4-Jrp"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SqP-MV-dIy">
-                        <rect key="frame" x="367" y="23" width="62" height="17"/>
-                        <animations/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="End Time" id="lcK-2l-FGg">
-                            <font key="font" metaFont="cellTitle"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrz-gJ-UOH" userLabel="Enable End Time">
-                        <rect key="frame" x="347" y="22" width="21" height="18"/>
+                        <rect key="frame" x="380" y="22" width="44" height="18"/>
                         <animations/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="pdz-sM-6DB">
+                        <buttonCell key="cell" type="check" title="End" bezelStyle="regularSquare" imagePosition="left" alignment="center" inset="2" id="pdz-sM-6DB">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="cellTitle"/>
                         </buttonCell>
                         <connections>
                             <action selector="endTimeCheckBoxHandler:" target="-2" id="e3R-vr-fF5"/>
                         </connections>
                     </button>
+                    <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1V3-oM-Mag">
+                        <rect key="frame" x="234" y="21" width="96" height="20"/>
+                        <animations/>
+                        <sliderCell key="cell" state="on" alignment="left" maxValue="30" doubleValue="30" tickMarkPosition="above" sliderType="linear" id="6iK-W5-gaR"/>
+                        <connections>
+                            <action selector="delayHandler:" target="-2" id="wz1-as-8Il"/>
+                        </connections>
+                    </slider>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3lP-cn-95w">
+                        <rect key="frame" x="333" y="21" width="23" height="17"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2.5" id="PGq-fh-Ewi">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <animations/>
             </view>

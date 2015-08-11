@@ -47,25 +47,26 @@ class AppEntry: NSObject, NSCoding
 
 class LaunchParams: NSObject, NSCoding
 {
-    var keepRun     : Bool = true
+    var keepRun     : Bool = false
     var timerEnabled: Bool = false
     
     // TODO: should use a tuple for these? -> NO. maybe Tuple can not be encoded because it's not a class!
-    var quitHour    : Int  = -1
-    var quitMinute  : Int  = -1
+    var quitHour    : Int = -1
+    var quitMinute  : Int = -1
+    var delay       : Int = 0
     
-    // TODO: application list - can I do this? -> YES. I can, solved.
     var apps: [AppEntry] = []
     
     override init(){}
     
     required init(coder aDecoder: NSCoder)
     {
-        keepRun = aDecoder.decodeObjectForKey("KR") as! Bool
+        keepRun      = aDecoder.decodeObjectForKey("KR") as! Bool
         timerEnabled = aDecoder.decodeObjectForKey("TE") as! Bool
-        quitHour   = aDecoder.decodeObjectForKey("QH") as! Int
-        quitMinute = aDecoder.decodeObjectForKey("QM") as! Int
-        apps = aDecoder.decodeObjectForKey("APPS") as! [AppEntry]
+        quitHour     = aDecoder.decodeObjectForKey("QH") as! Int
+        quitMinute   = aDecoder.decodeObjectForKey("QM") as! Int
+        delay        = aDecoder.decodeObjectForKey("DE") as! Int
+        apps         = aDecoder.decodeObjectForKey("APPS") as! [AppEntry]
     }
     func encodeWithCoder(aCoder: NSCoder)
     {
@@ -73,6 +74,7 @@ class LaunchParams: NSObject, NSCoding
         aCoder.encodeObject(timerEnabled, forKey:"TE")
         aCoder.encodeObject(quitHour, forKey:"QH")
         aCoder.encodeObject(quitMinute, forKey:"QM")
+        aCoder.encodeObject(delay, forKey:"DE")
         aCoder.encodeObject(apps, forKey:"APPS")
     }
 }
