@@ -40,7 +40,7 @@ class AppEntry: NSObject, NSCoding
     }
     
     //TODO: should handle errors in case of that the icon file is missing?
-    // must call to get NSImagea
+    
     func fetchIconData()
     {
         let ws = NSWorkspace.sharedWorkspace()

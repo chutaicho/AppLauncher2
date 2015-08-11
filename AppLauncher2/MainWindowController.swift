@@ -9,9 +9,6 @@
 
 import Cocoa
 
-typealias KVOContext = UInt8
-var MyObservationContext = KVOContext()
-
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
     @IBOutlet weak var arrayController: NSArrayController!
@@ -246,8 +243,9 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         let minutes = cal.components(NSCalendarUnit.Minute, fromDate: date).minute
         let now:(h:Int,m:Int) = (hour, minutes)
         
-        //print("now: " + String(now.h) + ":" + String(now.m))
-        //print("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
+        cout("now: " + String(now.h) + ":" + String(now.m))
+        cout("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
+        
         if now.h == _params.quitHour && now.m == _params.quitMinute
         {
             exit()
