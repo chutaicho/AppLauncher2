@@ -12,12 +12,8 @@ import Cocoa
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
     @IBOutlet weak var arrayController: NSArrayController!
-    
-    @IBOutlet weak var keepRunButton: NSButton!
-    @IBOutlet weak var timerEnabled:  NSButton!
-    @IBOutlet weak var delaySlider:   NSSlider!
-    @IBOutlet weak var delayTF:       NSTextField!
-    
+    var _paramViewController: ParamViewController =  ParamViewController()
+
     // MARK: - consts
     let NIB_NAME     = "MainWindowController"
     let UDKEY_PARAMS = "SavedParams"
@@ -43,24 +39,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         {
             let params = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! LaunchParams
             
-            //TODO: should copy manually?
-            _params.keepRun      = params.keepRun
-            _params.timerEnabled = params.timerEnabled
-            _params.quitHour     = params.quitHour
-            _params.quitMinute   = params.quitMinute
-            _params.delay        = params.delay
-            
-            cout("--------")
-            cout(_params.keepRun)
-            cout(_params.timerEnabled)
-            cout(_params.quitHour)
-            cout(_params.quitMinute)
-            cout(_params.delay)
-            
-            keepRunButton.state  = _params.keepRun ? 1 : 0
-            timerEnabled.state   = _params.timerEnabled ? 1 : 0
-            delaySlider.integerValue = _params.delay
-            delayTF.integerValue = _params.delay
+            _params.copy(aTarget: params)
+            _paramViewController.setParams(_params)
             
             var i = 0
             for entry:AppEntry in params.apps
@@ -80,6 +60,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         else
         {
             cout("params undefined.")
+            
+            // TODO: initialize params.
         }
         
         let nc = NSWorkspace.sharedWorkspace().notificationCenter
@@ -94,36 +76,20 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     {
         exit()
     }
-    @IBAction func keepRunHandler(sender: NSButton)
+    @IBAction func paramButtonHandler(sender: NSButton)
     {
-        _params.keepRun = sender.state == NSOnState ? true : false
-        save()
+        cout("paramButtonHandler")
+        self.window!.beginSheet(_paramViewController.window!, completionHandler:{ response in
+                
+            if response == NSModalResponseOK
+            {
+                //TODO: save params here!
+                let params = self._paramViewController.getParams()
+                self._params.copy(aTarget: params)
+                self.save()
+            }
+        })
     }
-    @IBAction func delayHandler(sender: NSSlider)
-    {
-        _params.delay = sender.integerValue
-        delayTF.integerValue = _params.delay
-        save()
-    }
-    
-    @IBAction func endTimeCheckBoxHandler(sender: NSButton)
-    {
-        _params.timerEnabled = sender.state == NSOnState ? true : false
-        save()
-    }
-    @IBAction func endTimeHandler(sender: NSDatePicker)
-    {
-        let value   = sender.dateValue
-        let cal     = NSCalendar.currentCalendar()
-        let hour    = cal.components(NSCalendarUnit.Hour, fromDate: value).hour
-        let minutes = cal.components(NSCalendarUnit.Minute, fromDate: value).minute
-        
-        _params.quitHour = hour
-        _params.quitMinute = minutes
-        
-        save()
-    }
-    
     @IBAction func addApplication(sender: NSButton)
     {
         let openPanel = NSOpenPanel()

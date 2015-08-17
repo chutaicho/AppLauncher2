@@ -14,6 +14,8 @@
 		1394BEF41B589D6B00011B93 /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1394BEF21B589D6B00011B93 /* MainWindowController.swift */; };
 		1394BEF51B589D6B00011B93 /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1394BEF31B589D6B00011B93 /* MainWindowController.xib */; };
 		13ACF97B1B7165AD0075437B /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13ACF97A1B7165AD0075437B /* AppModel.swift */; };
+		13E9008D1B81A815002F4C63 /* ParamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E9008B1B81A815002F4C63 /* ParamViewController.swift */; };
+		13E9008E1B81A815002F4C63 /* ParamViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13E9008C1B81A815002F4C63 /* ParamViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		1394BEF21B589D6B00011B93 /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		1394BEF31B589D6B00011B93 /* MainWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindowController.xib; sourceTree = "<group>"; };
 		13ACF97A1B7165AD0075437B /* AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		13E9008B1B81A815002F4C63 /* ParamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParamViewController.swift; sourceTree = "<group>"; };
+		13E9008C1B81A815002F4C63 /* ParamViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ParamViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,8 +84,10 @@
 			isa = PBXGroup;
 			children = (
 				13ACF97A1B7165AD0075437B /* AppModel.swift */,
+				13E9008B1B81A815002F4C63 /* ParamViewController.swift */,
 				1394BEF21B589D6B00011B93 /* MainWindowController.swift */,
 				1334EC361B43DEFA00DBDD23 /* AppDelegate.swift */,
+				13E9008C1B81A815002F4C63 /* ParamViewController.xib */,
 				1394BEF31B589D6B00011B93 /* MainWindowController.xib */,
 				1334EC3A1B43DEFA00DBDD23 /* MainMenu.xib */,
 				1334EC381B43DEFA00DBDD23 /* Images.xcassets */,
@@ -196,6 +202,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13E9008E1B81A815002F4C63 /* ParamViewController.xib in Resources */,
 				1334EC391B43DEFA00DBDD23 /* Images.xcassets in Resources */,
 				1394BEF51B589D6B00011B93 /* MainWindowController.xib in Resources */,
 				1334EC3C1B43DEFA00DBDD23 /* MainMenu.xib in Resources */,
@@ -216,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13E9008D1B81A815002F4C63 /* ParamViewController.swift in Sources */,
 				1394BEF41B589D6B00011B93 /* MainWindowController.swift in Sources */,
 				13ACF97B1B7165AD0075437B /* AppModel.swift in Sources */,
 				1334EC371B43DEFA00DBDD23 /* AppDelegate.swift in Sources */,

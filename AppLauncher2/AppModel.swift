@@ -11,7 +11,7 @@ import Cocoa
 
 //MARK: - UTIL
 
-let DEBUG: Bool = false
+let DEBUG: Bool = true
 
 func deleteUserDefault()
 {
@@ -40,7 +40,6 @@ class AppEntry: NSObject, NSCoding
     }
     
     //TODO: should handle errors in case of that the icon file is missing?
-    
     func fetchIconData()
     {
         let ws = NSWorkspace.sharedWorkspace()
@@ -72,6 +71,7 @@ class LaunchParams: NSObject, NSCoding
     var quitMinute  : Int = -1
     var delay       : Int = 0
     
+    // the content of the array-controller @ MainWindowController.xib
     var apps: [AppEntry] = []
     
     override init(){}
@@ -93,5 +93,13 @@ class LaunchParams: NSObject, NSCoding
         aCoder.encodeObject(quitMinute, forKey:"QM")
         aCoder.encodeObject(delay, forKey:"DE")
         aCoder.encodeObject(apps, forKey:"APPS")
+    }
+    func copy(aTarget p:LaunchParams)
+    {
+        self.keepRun      = p.keepRun
+        self.timerEnabled = p.timerEnabled
+        self.quitHour     = p.quitHour
+        self.quitMinute   = p.quitMinute
+        self.delay        = p.delay
     }
 }

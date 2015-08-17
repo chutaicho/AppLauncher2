@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A235d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A244d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
     </dependencies>
@@ -7,10 +7,6 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MainWindowController" customModule="AppLauncher2" customModuleProvider="target">
             <connections>
                 <outlet property="arrayController" destination="l93-5i-tW8" id="U3G-98-RDb"/>
-                <outlet property="delaySlider" destination="1V3-oM-Mag" id="69e-kL-5OF"/>
-                <outlet property="delayTF" destination="3lP-cn-95w" id="TK3-oT-XS5"/>
-                <outlet property="keepRunButton" destination="heH-Aa-qab" id="wFU-z7-Fi5"/>
-                <outlet property="timerEnabled" destination="rrz-gJ-UOH" id="TVu-wG-EmH"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -25,23 +21,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="662" height="235"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="POt-4s-ZlG">
-                        <rect key="frame" x="435" y="20" width="90" height="27"/>
-                        <animations/>
-                        <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="2b9-Wi-qu9">
-                            <font key="font" metaFont="system"/>
-                            <calendarDate key="date" timeIntervalSinceReferenceDate="-595929600" calendarFormat="%Y-%m-%d %H:%M:%S %z">
-                                <!--1982-02-12 08:00:00 -0800-->
-                                <timeZone key="timeZone" name="US/Pacific"/>
-                            </calendarDate>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <datePickerElements key="datePickerElements" hour="YES" minute="YES"/>
-                        </datePickerCell>
-                        <connections>
-                            <action selector="endTimeHandler:" target="-2" id="WQ4-Db-4XX"/>
-                        </connections>
-                    </datePicker>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h68-fY-XBx" userLabel="Button Remove">
                         <rect key="frame" x="68" y="11" width="40" height="40"/>
                         <animations/>
@@ -63,17 +42,6 @@
                         </buttonCell>
                         <connections>
                             <action selector="addApplication:" target="-2" id="2ic-Ss-D6c"/>
-                        </connections>
-                    </button>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heH-Aa-qab" userLabel="Keep Run">
-                        <rect key="frame" x="135" y="22" width="93" height="18"/>
-                        <animations/>
-                        <buttonCell key="cell" type="check" title="Keep Run" bezelStyle="regularSquare" imagePosition="left" inset="2" id="bhi-Mk-KbP">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="cellTitle"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="keepRunHandler:" target="-2" id="TwR-0V-D8M"/>
                         </connections>
                     </button>
                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="piz-n2-AM3">
@@ -251,34 +219,17 @@
                             <action selector="quitApplication:" target="-2" id="ITZ-k4-Jrp"/>
                         </connections>
                     </button>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrz-gJ-UOH" userLabel="Enable End Time">
-                        <rect key="frame" x="380" y="22" width="44" height="18"/>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YnO-fn-zEA">
+                        <rect key="frame" x="494" y="11" width="40" height="40"/>
                         <animations/>
-                        <buttonCell key="cell" type="check" title="End" bezelStyle="regularSquare" imagePosition="left" alignment="center" inset="2" id="pdz-sM-6DB">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="cellTitle"/>
+                        <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="NSActionTemplate" imagePosition="only" alignment="center" borderStyle="border" inset="2" id="t46-gO-xbv">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="endTimeCheckBoxHandler:" target="-2" id="e3R-vr-fF5"/>
+                            <action selector="paramButtonHandler:" target="-2" id="C2o-V6-GY2"/>
                         </connections>
                     </button>
-                    <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1V3-oM-Mag">
-                        <rect key="frame" x="234" y="21" width="96" height="20"/>
-                        <animations/>
-                        <sliderCell key="cell" state="on" alignment="left" maxValue="30" doubleValue="30" tickMarkPosition="above" sliderType="linear" id="6iK-W5-gaR"/>
-                        <connections>
-                            <action selector="delayHandler:" target="-2" id="wz1-as-8Il"/>
-                        </connections>
-                    </slider>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3lP-cn-95w">
-                        <rect key="frame" x="333" y="21" width="23" height="17"/>
-                        <animations/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2.5" id="PGq-fh-Ewi">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                 </subviews>
                 <animations/>
             </view>
