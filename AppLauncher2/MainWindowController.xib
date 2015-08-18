@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MainWindowController" customModule="AppLauncher2" customModuleProvider="target">
             <connections>
+                <outlet property="_tableView" destination="a3K-ob-HLe" id="8nU-3B-RGQ"/>
                 <outlet property="arrayController" destination="l93-5i-tW8" id="U3G-98-RDb"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>

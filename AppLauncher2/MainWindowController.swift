@@ -9,14 +9,20 @@
 
 import Cocoa
 
+//TODO: display counting down of the start delay.
+//TODO: drag & drop support
+
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
     @IBOutlet weak var arrayController: NSArrayController!
     var _paramViewController: ParamViewController =  ParamViewController()
+    
+    @IBOutlet weak var _tableView: NSTableView!
 
     // MARK: - consts
     let NIB_NAME     = "MainWindowController"
     let UDKEY_PARAMS = "SavedParams"
+    let DRAGGED_TYPE = "TableViewDraggedType"
     let REBOOT_DELAY = 1.0
     
     // MARK: - vars
@@ -30,6 +36,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     {
         super.windowDidLoad()
 
+        _tableView.registerForDraggedTypes([NSFilenamesPboardType, DRAGGED_TYPE])
+        
         let userD = NSUserDefaults.standardUserDefaults()
         
         //MARK: DEBUG
@@ -263,10 +271,55 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         
         return res
     }
-    //MARK: - TableView
-    //TODO: set the table-view's order to be editable.
-//    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
-//    {
-//        return true
-//    }
+    
+    //MARK: TableView Drag stuff
+    //Reference: http://juliuspaintings.co.uk/cgi-bin/paint_css/animatedPaint/074-NSTableView-drag-drop.pl
+    
+    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
+    {
+        let data = NSKeyedArchiver.archivedDataWithRootObject(rowIndexes)
+        pboard.declareTypes([DRAGGED_TYPE], owner: self)
+        pboard.setData(data, forType: DRAGGED_TYPE)
+        return true
+    }
+    func tableView(tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation
+    {
+        return NSDragOperation.Every
+    }
+    func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool
+    {
+        let pboard = info.draggingPasteboard()
+        let types  = pboard.types
+        
+        if (types?.contains(DRAGGED_TYPE) != nil)
+        {
+            let rowData     = pboard.dataForType(DRAGGED_TYPE)
+            let rowIndexes  = NSKeyedUnarchiver.unarchiveObjectWithData(rowData!)
+            let dragRow     = rowIndexes?.firstIndex
+            let targetEntry = _params.apps[dragRow!]
+            
+            cout(dragRow)
+
+            if dragRow < row
+            {
+                self.arrayController.removeObjectAtArrangedObjectIndex(dragRow!)
+                self.arrayController.addObject(targetEntry)
+                self.rearrangeObject()
+            }
+            else
+            {
+                // TODO: reorder the rows.
+            }
+            
+            return true
+        }
+        else if (types?.contains(NSFilenamesPboardType) != nil)
+        {
+            //TODO: Drop a new entry.
+            cout("NSFilenamesPboardType types")
+            return true
+        }
+        
+        return false
+    }
 }
