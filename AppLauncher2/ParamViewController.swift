@@ -14,10 +14,10 @@ class ParamViewController: NSWindowController
     // MARK: - consts
     let NIB_NAME = "ParamViewController"
     
-    dynamic var keepRun: Bool      = true
-    dynamic var timerEnabled: Bool = false
-    dynamic var delay: Int         = 12
-    dynamic var quitTime: NSDate   = NSDate()
+    private dynamic var keepRun: Bool      = true
+    private dynamic var timerEnabled: Bool = false
+    private dynamic var delay: Int         = 12
+    private dynamic var quitTime: NSDate   = NSDate()
     
     func setParams(params: LaunchParams)
     {
@@ -38,12 +38,9 @@ class ParamViewController: NSWindowController
         params.timerEnabled = timerEnabled
         params.delay = delay
         
-        let cal    = NSCalendar.currentCalendar()
-        let hour   = cal.components(NSCalendarUnit.Hour, fromDate: quitTime).hour
-        let minute = cal.components(NSCalendarUnit.Minute, fromDate: quitTime).minute
-        
-        params.quitHour = hour
-        params.quitMinute = minute
+        let qt = getTimeFromDate(quitTime)
+        params.quitHour = qt.hour
+        params.quitMinute = qt.minute
         
         return params
     }
@@ -58,11 +55,6 @@ class ParamViewController: NSWindowController
     //MARK: IBActions
     @IBAction func okayButtonClicked(button: NSButton)
     {
-        let cal     = NSCalendar.currentCalendar()
-        let hour    = cal.components(NSCalendarUnit.Hour, fromDate: quitTime).hour
-        let minutes = cal.components(NSCalendarUnit.Minute, fromDate: quitTime).minute
-        print("H: " + String(hour) + ", " + "M: " + String(minutes))
-        
         dismissWithModalResponse(NSModalResponseOK)
     }
     @IBAction func cancelButtonClicked(button: NSButton)

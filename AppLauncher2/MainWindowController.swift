@@ -60,8 +60,6 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         else
         {
             cout("params undefined.")
-            
-            // TODO: initialize params.
         }
         
         let nc = NSWorkspace.sharedWorkspace().notificationCenter
@@ -83,7 +81,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 
             if response == NSModalResponseOK
             {
-                //TODO: save params here!
+                //MARK: save params here!
                 let params = self._paramViewController.getParams()
                 self._params.copy(aTarget: params)
                 self.save()
@@ -211,7 +209,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         cout("now: " + String(now.h) + ":" + String(now.m))
         cout("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
         
-        if now.h == _params.quitHour && now.m == _params.quitMinute
+        if now.h == _params.quitHour && now.m == _params.quitMinute && _params.timerEnabled
         {
             exit()
         }
