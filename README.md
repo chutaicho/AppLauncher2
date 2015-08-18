@@ -1,3 +1,5 @@
+![Screenshot](/../master/AppLauncher2/Images.xcassets/AppIcon.appiconset/512.png?raw=true "")
+
 ####AppLauncher2
 
 The new version of [AppLauncher](https://github.com/chutaicho/AppLauncher).   

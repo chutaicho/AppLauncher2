@@ -11,7 +11,7 @@ import Cocoa
 
 //MARK: - UTIL
 
-let DEBUG: Bool = true
+let DEBUG: Bool = false
 
 func deleteUserDefault()
 {
@@ -29,7 +29,7 @@ func getTimeFromDate(date: NSDate) -> (hour: Int, minute: Int)
     let c = NSCalendar(identifier: NSCalendarIdentifierGregorian)
     let h = c!.components(NSCalendarUnit.Hour, fromDate: date).hour
     let m = c!.components(NSCalendarUnit.Minute, fromDate: date).minute
-
+    
     return (h,m)
 }
 

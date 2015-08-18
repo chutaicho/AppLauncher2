@@ -9,9 +9,6 @@
 
 import Cocoa
 
-//TODO: display counting down of the start delay.
-//TODO: drag & drop support
-
 class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableViewDelegate
 {
     @IBOutlet weak var arrayController: NSArrayController!
@@ -132,9 +129,6 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 //Do what you will
                 //If there's only one URL, surely 'openPanel.URL'
                 //but otherwise a for loop works
-                
-                //print(openPanel.URL?.absoluteString)
-                //print(openPanel.URL?.lastPathComponent)
                 
                 let path = openPanel.URL?.path
                 let name = openPanel.URL?.lastPathComponent
@@ -306,7 +300,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         return res
     }
     
-    //MARK: TableView Drag stuff
+    //MARK: TableView Drag & Drop stuff
     //Reference: http://juliuspaintings.co.uk/cgi-bin/paint_css/animatedPaint/074-NSTableView-drag-drop.pl
     
     func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
