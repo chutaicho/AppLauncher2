@@ -1,4 +1,4 @@
-![Screenshot](/../master/AppLauncher2/Images.xcassets/AppIcon.appiconset/512.png?raw=true "")
+![Screenshot](/../master/AppLauncher2/Images.xcassets/AppIcon.appiconset/256.png?raw=true "")
 
 ####AppLauncher2
 
