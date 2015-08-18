@@ -18,6 +18,8 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     var _paramViewController: ParamViewController =  ParamViewController()
     
     @IBOutlet weak var _tableView: NSTableView!
+    @IBOutlet weak var _indicator: NSProgressIndicator!
+    @IBOutlet weak var _delayInfo: NSTextField!
 
     // MARK: - consts
     let NIB_NAME     = "MainWindowController"
@@ -26,9 +28,10 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     let REBOOT_DELAY = 1.0
     
     // MARK: - vars
-    var _params  : LaunchParams   = LaunchParams()
-    var _keepRun : Bool           = true;
-    var _timer   : NSTimer        = NSTimer()
+    var _params  : LaunchParams = LaunchParams()
+    var _keepRun : Bool         = true;
+    var _timer   : NSTimer      = NSTimer()
+    var _cDown   : Int         = 0
     
     override var windowNibName: String? { return NIB_NAME }
     
@@ -64,6 +67,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             }
             
             cout("params decoded.")
+            cout("params apps: " + String(_params.apps.count))
         }
         else
         {
@@ -75,6 +79,21 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         nc.addObserver(self, selector: "onQuitNotification:",   name: NSWorkspaceDidTerminateApplicationNotification, object: nil)
         
         _timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("timerUpdate"), userInfo: nil, repeats: true)
+        
+        // MARK: Delay Info
+        _cDown = (_params.delay - 1)
+        
+        if _cDown > 0
+        {
+            _indicator.startAnimation(self)
+            _delayInfo.stringValue = "Start in " + String(_cDown) + " seconds."
+        }
+        else
+        {
+            _indicator.hidden = true
+            _delayInfo.hidden = true
+            _cDown = -1
+        }
     }
 
     // MARK: - IBAction
@@ -208,6 +227,21 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     //MARK: - public
     func timerUpdate()
     {
+        if _cDown > 0
+        {
+            _delayInfo.stringValue = "Start in " + String(_cDown) + " seconds."
+            _cDown--
+        }
+        else if _cDown == 0
+        {
+            _indicator.stopAnimation(self)
+            _indicator.hidden = true
+            _delayInfo.hidden = true
+            _cDown = -1
+        }
+        
+        
+        
         let date = NSDate()
         let cal = NSCalendar.currentCalendar()
         let hour    = cal.components(NSCalendarUnit.Hour, fromDate: date).hour
@@ -297,8 +331,6 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             let rowIndexes  = NSKeyedUnarchiver.unarchiveObjectWithData(rowData!)
             let dragRow     = rowIndexes?.firstIndex
             let targetEntry = _params.apps[dragRow!]
-            
-            cout(dragRow)
 
             if dragRow < row
             {
@@ -308,8 +340,12 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             }
             else
             {
-                // TODO: reorder the rows.
+                self.arrayController.removeObjectAtArrangedObjectIndex(dragRow!)
+                self.arrayController.insertObject(targetEntry, atArrangedObjectIndex: row)
+                self.rearrangeObject()
             }
+            
+            cout("params apps: " + String(_params.apps.count))
             
             return true
         }

@@ -6,6 +6,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MainWindowController" customModule="AppLauncher2" customModuleProvider="target">
             <connections>
+                <outlet property="_delayInfo" destination="4NY-xn-kOk" id="eb3-NM-DIY"/>
+                <outlet property="_indicator" destination="fFJ-0j-zwO" id="9Yk-nT-4k1"/>
                 <outlet property="_tableView" destination="a3K-ob-HLe" id="8nU-3B-RGQ"/>
                 <outlet property="arrayController" destination="l93-5i-tW8" id="U3G-98-RDb"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
@@ -231,6 +233,19 @@
                             <action selector="paramButtonHandler:" target="-2" id="C2o-V6-GY2"/>
                         </connections>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4NY-xn-kOk">
+                        <rect key="frame" x="274" y="23" width="182" height="17"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Start in 1 seconds." id="6Ra-uh-FQN">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="fFJ-0j-zwO">
+                        <rect key="frame" x="252" y="23" width="16" height="16"/>
+                        <animations/>
+                    </progressIndicator>
                 </subviews>
                 <animations/>
             </view>
