@@ -28,7 +28,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
     var _params  : LaunchParams = LaunchParams()
     var _keepRun : Bool         = true;
     var _timer   : NSTimer      = NSTimer()
-    var _cDown   : Int         = 0
+    var _cDown   : Int          = 0
     
     override var windowNibName: String? { return NIB_NAME }
     
@@ -131,8 +131,7 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 //but otherwise a for loop works
                 
                 let path = openPanel.URL?.path
-                let name = openPanel.URL?.lastPathComponent
-                let appname = name?.stringByDeletingPathExtension
+                let name = openPanel.URL?.URLByDeletingPathExtension?.lastPathComponent
                 let extention = openPanel.URL?.pathExtension
                 
                 if extention != "app"
@@ -145,7 +144,9 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
                 }
                 else
                 {
-                    if !self.isOurApp(aPath: path!)
+                    let appname = name
+                    
+                    if !self.isOurApp(aPath: path!, aName: appname!)
                     {
                         let entry: AppEntry = AppEntry()
                         entry.set(aPath: path!, aName: appname!, aHide: false)
@@ -234,21 +235,12 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
             _cDown = -1
         }
         
+        let now = getTimeFromDate(NSDate())
         
-        
-        let date = NSDate()
-        let cal = NSCalendar.currentCalendar()
-        let hour    = cal.components(NSCalendarUnit.Hour, fromDate: date).hour
-        let minutes = cal.components(NSCalendarUnit.Minute, fromDate: date).minute
-        let now:(h:Int,m:Int) = (hour, minutes)
-        
-        cout("now: " + String(now.h) + ":" + String(now.m))
+        cout("now: " + String(now.hour) + ":" + String(now.minute))
         cout("set: " + String(_params.quitHour) + ":" + String(_params.quitMinute))
         
-        if now.h == _params.quitHour && now.m == _params.quitMinute && _params.timerEnabled
-        {
-            exit()
-        }
+        if now.hour == _params.quitHour && now.minute == _params.quitMinute && _params.timerEnabled { exit() }
     }
     func exit()
     {
@@ -283,13 +275,13 @@ class MainWindowController: NSWindowController, NSTableViewDataSource, NSTableVi
         self.arrayController.rearrangeObjects()
         save()
     }
-    private func isOurApp(aPath path: String) -> Bool
+    private func isOurApp(aPath path: String, aName name: String = "") -> Bool
     {
         var res = false
         
         for entry:AppEntry in _params.apps
         {
-            if entry.path == path
+            if entry.path == path || entry.name == name
             {
                 res = true
                 cout(path + " is our app.")
