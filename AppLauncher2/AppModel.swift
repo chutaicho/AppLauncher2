@@ -11,7 +11,7 @@ import Cocoa
 
 //MARK: - UTIL
 
-let DEBUG: Bool = true
+let DEBUG: Bool = false
 
 func deleteUserDefault()
 {
