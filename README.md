@@ -1,6 +1,6 @@
 ![Screenshot](/../master/AppLauncher2/Images.xcassets/AppIcon.appiconset/128.png?raw=true "")
 
-####AppLauncher2
+#### AppLauncher2
 
 The new version of [AppLauncher](https://github.com/chutaicho/AppLauncher).   
 Rewrote in Swift2.
@@ -11,12 +11,12 @@ Requirement: Xcode7 or higher.
 
 ![Screenshot](/../master/screenshot.png?raw=true "")
 
-####What this does.
+#### What this does.
 
 - Launch Apps
 - Restart listed apps when these are accidentaly terminated.
 - Quit apps in schedule.
 
-####TODO
+#### TODO
 
 - Drag & Drop Support
